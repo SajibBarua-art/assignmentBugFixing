@@ -68,3 +68,10 @@ img {
   color: red;
   font-size: 18px;
 }
+#search-result-zero {
+  color:white;
+  background-color:crimson;
+  padding: 20px;
+  border-radius: 10px;
+  display: none;
+}

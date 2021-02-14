@@ -4,6 +4,8 @@ const galleryHeader = document.querySelector('.gallery-header');
 const searchBtn = document.getElementById('search-btn');
 const sliderBtn = document.getElementById('create-slider');
 const sliderContainer = document.getElementById('sliders');
+const searchInput = document.getElementById("search");
+const imagesAmountDiv = document.getElementById('images-amount-div');
 // selected image 
 let sliders = [];
 
@@ -25,10 +27,11 @@ const showImages = (images) => {
     div.innerHTML = ` <img class="img-fluid img-thumbnail" onclick=selectItem(event,"${image.webformatURL}") src="${image.webformatURL}" alt="${image.tags}">`;
     gallery.appendChild(div)
   })
-
+  toggleSpinner();
 }
 
 const getImages = (query) => {
+  toggleSpinner();
   fetch(`https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`)
     .then(response => response.json())
     .then(data => showImages(data.hits))
@@ -38,14 +41,16 @@ const getImages = (query) => {
 let slideIndex = 0;
 const selectItem = (event, img) => {
   let element = event.target;
-  element.classList.add('added');
+  element.classList.toggle('added');
 
   let item = sliders.indexOf(img);
   if (item === -1) {
     sliders.push(img);
   } else {
-    alert('Hey, Already added !')
+    sliders.splice(item, 1);
   }
+  const imagesNumber = document.getElementById('images-number');
+  imagesNumber.innerText = sliders.length;
 }
 var timer
 const createSlider = () => {
@@ -116,13 +121,38 @@ const changeSlide = (index) => {
 }
 
 searchBtn.addEventListener('click', function () {
+  const durationWarning = document.getElementById('duration-warning');
+  durationWarning.classList.add('d-none');
+  imagesAmountDiv.classList.remove('d-none');
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
-  const search = document.getElementById('search');
-  getImages(search.value)
+  getImages(searchInput.value)
   sliders.length = 0;
+  searchInput.value = "";
 })
 
 sliderBtn.addEventListener('click', function () {
   createSlider()
 })
+
+searchInput.addEventListener("keyup", event => {
+  if (event.key === 'Enter') {
+   imagesAmountDiv.classList.remove('d-none');
+   event.preventDefault();
+   searchBtn.click();
+   searchInput.value = "";
+  }
+});
+
+const durationInput = document.getElementById("duration");
+durationInput.addEventListener("keyup", event =>{
+  if(event.key == 'Enter') {
+    event.preventDefault();
+    sliderBtn.click();
+  }
+})
+
+const toggleSpinner = () => {
+  const spinner = document.getElementById('loading-spinner');
+  spinner.classList.toggle('d-none');
+}
