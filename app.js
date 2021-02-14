@@ -17,6 +17,16 @@ const KEY = '15674931-a9d714b6e9d654524df198e00&q';
 
 // show images 
 const showImages = (images) => {
+  const searchResultZero = document.getElementById('search-result-zero');
+  if(images.length === 0) {
+    document.getElementById('slider-option').style.visibility = "hidden";
+    imagesAmountDiv.classList.add('d-none');
+    searchResultZero.style.display = "block";
+  } else {
+    document.getElementById('slider-option').style.visibility = "visible";
+    imagesAmountDiv.classList.remove('d-none');
+    searchResultZero.style.display = "none";
+  }
   imagesArea.style.display = 'block';
   gallery.innerHTML = '';
   // show gallery title
@@ -123,7 +133,6 @@ const changeSlide = (index) => {
 searchBtn.addEventListener('click', function () {
   const durationWarning = document.getElementById('duration-warning');
   durationWarning.classList.add('d-none');
-  imagesAmountDiv.classList.remove('d-none');
   document.querySelector('.main').style.display = 'none';
   clearInterval(timer);
   getImages(searchInput.value)
@@ -137,7 +146,6 @@ sliderBtn.addEventListener('click', function () {
 
 searchInput.addEventListener("keyup", event => {
   if (event.key === 'Enter') {
-   imagesAmountDiv.classList.remove('d-none');
    event.preventDefault();
    searchBtn.click();
    searchInput.value = "";
