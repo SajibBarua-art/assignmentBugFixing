@@ -70,7 +70,7 @@ img {
 }
 #search-result-zero {
   color:white;
-  background-color:crimson;
+  background-color:rgb(148, 5, 34);
   padding: 20px;
   border-radius: 10px;
   display: none;
